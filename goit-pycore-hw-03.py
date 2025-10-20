@@ -26,7 +26,8 @@ def get_days_from_today(date_string: str):
         difference_in_days = (today - given_date).days
         
         # Повертаємо успішний результат у вигляді рядка
-        return f"Кількість днів між датами: {difference_in_days}"
+        print (f"Кількість днів між датами: {difference_in_days}")
+        return difference_in_days
         
     except ValueError:
         # Ця помилка виникне, якщо дата не існує (наприклад, "2023-02-30")
