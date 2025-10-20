@@ -1,23 +1,38 @@
-from datetime import datetime, date
-# функція обрахунку кількості днів
-def get_days_from_today(given_date) -> int:
-    date_today = date.today()
-    return abs(given_date - date_today).days
 
-date_inp = str(input("Введіть дату у форматі РРРР-ММ-ДД:"))
-date_parts = date_inp.split('-') # розбиваємо введену стрічку по символу -
-if len(date_parts[0]) != 4:      # перевіряємо першу частину на довжину 4
-    # ЯКЩО НІ: одразу виводимо помилку
-    print("Неправильний формат дати. Введіть у форматі РРРР-ММ-ДД")
-else:
-    # ЯКЩО ТАК: виконуємо конвертацію, як і раніше
-    try:   # перевіряємо винятки на правильність введення дати
-        date_n = datetime.strptime(date_inp, "%Y-%m-%d").date()
-        date_cnt = get_days_from_today(date_n)
-        print("Кількість днів від поточної до заданої дати:", date_cnt)
-    except NameError:
-         print("Неправильний формат дати. Введіть у форматі РРРР-ММ-ДД")
-    except ValueError:
-         print("Неправильний формат дати. Введіть у форматі РРРР-ММ-ДД")
+from datetime import datetime, date
+
+def get_days_from_today(date_string: str):
+    """
+    Перевіряє рядок з датою, конвертує його та повертає рядок з результатом
+    або повідомленням про помилку.
+    """
+    # Видаляємо зайві пробіли на початку та в кінці рядка
+    cleaned_string = date_string.strip()
     
-      
+    # Попередня перевірка формату (чи є 4 цифри для року)
+    date_parts = cleaned_string.split('-')
+    if len(date_parts) != 3 or len(date_parts[0]) != 4:
+        return "Помилка: Неправильний формат. Будь ласка, введіть дату як РРРР-ММ-ДД."
+
+    # Основний блок перевірки та обчислення
+    try:
+        # Конвертуємо рядок у дату
+        given_date = datetime.strptime(cleaned_string, "%Y-%m-%d").date()
+        
+        # Отримуємо поточну дату
+        today = date.today()
+        
+        # Обчислюємо різницю в днях
+        difference_in_days = (today - given_date).days
+        
+        # Повертаємо успішний результат у вигляді рядка
+        return f"Кількість днів між датами: {difference_in_days}"
+        
+    except ValueError:
+        # Ця помилка виникне, якщо дата не існує (наприклад, "2023-02-30")
+        return "Помилка: Неправильна дата. Перевірте день та місяць."
+
+# --- Як використовувати функцію ---
+user_input = input("Введіть дату у форматі РРРР-ММ-ДД: ")
+result = get_days_from_today(user_input)
+print(result)
